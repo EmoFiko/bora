@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bora, bu gökyüzü senin</title>
+<meta name="theme-color" content="#0e1024">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🚀</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0e1024;
+  --plum:#2b1a4d;
+  --gold:#f3c978;
+  --rose:#ff8fa3;
+  --paper:#f7efe3;
+  --mist:#b9b4d6;
+  --serif:"Instrument Serif", Georgia, "Times New Roman", serif;
+  --sans:"DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans);color:#efeaff;line-height:1.6;overflow-x:hidden;
+  background:radial-gradient(120% 80% at 50% 110%, var(--plum) 0%, var(--ink) 60%) fixed;
+}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+main{position:relative;z-index:1}
+section{min-height:100vh;min-height:100svh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:12vh max(6vw,env(safe-area-inset-right)) 12vh max(6vw,env(safe-area-inset-left));text-align:center}
+h1,h2{font-family:var(--serif);font-weight:400;line-height:1.05}
+h1{font-size:clamp(3rem,10vw,7.5rem)}
+h2{font-size:clamp(2rem,6vw,4rem);margin-bottom:1rem}
+p.lead{font-size:clamp(1.05rem,2.4vw,1.35rem);color:var(--mist);max-width:34ch;margin:1.2rem auto 0}
+.btn{
+  font:inherit;font-weight:700;cursor:pointer;border:0;border-radius:999px;
+  padding:.95rem 1.8rem;background:var(--gold);color:var(--ink);
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.btn{touch-action:manipulation;min-height:48px}
+@media (hover:hover){.btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(243,201,120,.3)}}
+#no{user-select:none;-webkit-user-select:none}
+#progressBar{position:fixed;left:0;top:0;height:3px;width:0;background:linear-gradient(90deg,var(--gold),var(--rose));z-index:100}
+.btn.ghost{background:transparent;color:#efeaff;border:1.5px solid var(--mist)}
+:focus-visible{outline:3px solid var(--rose);outline-offset:3px}
+
+/* HERO */
+#hero p.hint{margin-top:2.2rem;color:var(--mist);font-size:.95rem}
+#hero .btn{margin-top:2rem}
+#hero h1{animation:rise 1.4s cubic-bezier(.2,.7,.2,1) both}
+#hero p.lead{animation:rise 1.4s .35s cubic-bezier(.2,.7,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+
+/* TAKIMYILDIZ */
+#sky p.lead{margin-bottom:1.5rem}
+#constellation{position:relative;width:min(92vw,520px);aspect-ratio:1/1;margin:0 auto}
+#constellation svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+#constellation line{stroke:var(--gold);stroke-width:1.6;stroke-linecap:round;opacity:0;transition:opacity .8s}
+#constellation line.on{opacity:.85}
+.star{position:absolute;transform:translate(-50%,-50%);width:44px;height:44px;border:0;background:transparent;cursor:pointer;border-radius:50%}
+.star::before{content:"";position:absolute;inset:14px;border-radius:50%;background:#fff;box-shadow:0 0 12px 3px rgba(255,255,255,.55);transition:all .4s}
+.star:hover::before{inset:11px}
+.star.found::before{background:var(--gold);box-shadow:0 0 22px 7px rgba(243,201,120,.7);inset:11px}
+.star:not(.found){animation:pulse 2.6s ease-in-out infinite}
+.star:nth-child(2n):not(.found){animation-delay:.9s}
+.star:nth-child(3n):not(.found){animation-delay:1.7s}
+@keyframes pulse{50%{transform:translate(-50%,-50%) scale(1.25)}}
+#constellation.done .star.found::before{background:var(--rose);box-shadow:0 0 26px 9px rgba(255,143,163,.7)}
+#constellation.done line{stroke:var(--rose)}
+#reason{min-height:7.5rem;margin-top:1.5rem;max-width:30ch;font-family:var(--serif);font-size:clamp(1.6rem,4.5vw,2.4rem);line-height:1.2}
+#reason.swap{animation:swap .5s ease both}
+@keyframes swap{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+#progress{color:var(--mist);font-size:.95rem;margin-top:.6rem}
+#nudge{margin-top:1rem;color:var(--gold);opacity:0;transition:opacity 1s;font-weight:500}
+#nudge.show{opacity:1}
+
+/* GÖREV KAYDI */
+#mission p.lead{margin-bottom:2rem}
+.log{list-style:none;width:min(92vw,520px);text-align:left;position:relative;margin:0 auto 2.2rem}
+.log::before{content:"";position:absolute;left:19px;top:20px;bottom:20px;width:2px;background:rgba(185,180,214,.35)}
+.log li{position:relative;padding-left:3.4rem}
+.log button{
+  display:block;width:100%;text-align:left;font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:.7rem 0;
+}
+.log .dot{
+  position:absolute;left:0;top:.55rem;width:40px;height:40px;border-radius:50%;
+  display:grid;place-items:center;background:var(--ink);border:2px solid var(--mist);
+  font-weight:700;font-size:.95rem;transition:all .3s;
+}
+.log li.open .dot{background:var(--gold);border-color:var(--gold);color:var(--ink)}
+.log .t{font-family:var(--serif);font-size:1.6rem;line-height:1.2}
+.log .d{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s ease;color:var(--mist)}
+.log .d > div{overflow:hidden}
+.log li.open .d{grid-template-rows:1fr}
+.log li.open .d > div{padding-bottom:.9rem}
+#launchMsg{min-height:2.4rem;margin-top:1.2rem;font-family:var(--serif);font-size:1.8rem;color:var(--gold)}
+#launchOverlay{
+  position:fixed;inset:0;z-index:80;display:none;place-items:center;
+  background:rgba(14,16,36,.88);font-family:var(--serif);font-size:clamp(6rem,30vw,16rem);
+}
+#launchOverlay.on{display:grid}
+#launchOverlay .rocket{display:inline-block;font-size:.6em}
+#launchOverlay .rocket.fly{animation:fly 1.6s cubic-bezier(.5,0,.9,.4) forwards}
+@keyframes fly{to{transform:translateY(-120vh) scale(.6)}}
+
+/* SAYAÇ */
+#time .count{font-family:var(--serif);font-size:clamp(1.8rem,6vw,3.6rem);line-height:1.25;max-width:22ch}
+#time .count b{font-weight:400;color:var(--gold);font-variant-numeric:tabular-nums}
+
+/* MEKTUP */
+#envelope{
+  position:relative;width:min(86vw,360px);height:230px;border:0;cursor:pointer;
+  background:#e9d9c3;border-radius:6px;box-shadow:0 20px 50px rgba(0,0,0,.45);font:inherit;color:#5a3c2a;
+}
+#envelope::before{content:"";position:absolute;left:0;right:0;top:0;height:60%;background:#dcc7a9;clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:top;transition:transform .6s ease}
+#envelope span{position:absolute;left:0;right:0;bottom:26px;font-family:var(--serif);font-size:1.5rem}
+#envelope[aria-expanded="true"]::before{transform:rotateX(180deg)}
+#envelope .seal{position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);font-size:2rem;bottom:auto;right:auto;transition:opacity .3s}
+#envelope[aria-expanded="true"] .seal{opacity:0}
+#letterWrap{display:grid;grid-template-rows:0fr;transition:grid-template-rows .9s ease;width:min(92vw,560px)}
+#letterWrap.open{grid-template-rows:1fr}
+#letterWrap > div{overflow:hidden}
+.paper{
+  margin-top:1.5rem;background:var(--paper);color:#3a2a22;text-align:left;
+  padding:2.2rem clamp(1.4rem,5vw,2.8rem);border-radius:6px;
+  font-family:var(--serif);font-size:clamp(1.25rem,3.4vw,1.5rem);line-height:1.5;
+  box-shadow:0 24px 60px rgba(0,0,0,.5);
+}
+.paper p{margin-bottom:1rem;opacity:0;transform:translateY(8px)}
+.open .paper p{animation:rise .8s ease forwards}
+.open .paper p:nth-child(2){animation-delay:.9s}
+.open .paper p:nth-child(3){animation-delay:1.8s}
+.open .paper p:nth-child(4){animation-delay:2.7s}
+.paper .sign{text-align:right;font-style:italic}
+
+/* RİCA */
+#ask .big{font-family:var(--serif);font-size:clamp(2.2rem,7vw,4.4rem);line-height:1.05;max-width:16ch;margin:1rem auto 1.2rem}
+.price{display:inline-block;border:1.5px solid var(--gold);color:var(--gold);border-radius:999px;padding:.35rem 1rem;margin-bottom:1.8rem;font-weight:500}
+.actions{display:flex;gap:1.6rem;justify-content:center;align-items:center;flex-wrap:wrap;min-height:120px;padding:1rem}
+#yes{font-size:1.1rem;transition:transform .3s cubic-bezier(.3,1.5,.5,1)}
+#no{transition:transform .3s}
+#no.flying{position:fixed;z-index:50;transition:left .22s ease, top .22s ease, transform .3s}
+#quip{
+  min-height:3.2rem;margin-top:.4rem;color:var(--gold);font-weight:500;max-width:34ch;
+}
+#quip.pop{animation:swap .35s ease both}
+#tries{color:var(--mist);font-size:.9rem;margin-top:.6rem}
+.shake{animation:shake .4s}
+@keyframes shake{20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+#thanks{display:none}
+#thanks.show{display:block;animation:rise 1s both}
+.receipt{
+  background:var(--paper);color:#3a2a22;text-align:left;max-width:340px;margin:0 auto 1.6rem;
+  padding:1.4rem 1.5rem;border-radius:6px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.95rem;
+  box-shadow:0 24px 60px rgba(0,0,0,.5);transform:rotate(-1.5deg);
+}
+.receipt h3{text-align:center;font-size:1.1rem;margin-bottom:.8rem;letter-spacing:.05em}
+.receipt .row{display:flex;justify-content:space-between;gap:1rem;padding:.25rem 0;border-bottom:1px dashed #b9a58c}
+.receipt .ok{margin-top:.9rem;text-align:center;font-weight:700;color:#1f7a3d}
+#thanks .big{margin-bottom:1.4rem}
+#thanks a{text-decoration:none;display:inline-block}
+footer{position:relative;z-index:1;text-align:center;padding:3rem 1rem;color:var(--mist);font-size:.9rem}
+
+/* uçan emojiler */
+.fh{position:fixed;z-index:90;pointer-events:none;animation:float 2.1s ease-out forwards;transform:translate(-50%,-50%)}
+@keyframes float{
+  from{opacity:1;transform:translate(-50%,-50%)}
+  to{opacity:0;transform:translate(calc(-50% + var(--dx)),-190px) scale(1.4)}
+}
+
+@media (max-width:480px){
+  section{padding-top:9vh;padding-bottom:9vh}
+  #envelope{height:200px}
+  .actions{gap:1rem;min-height:140px}
+  #reason{min-height:6.5rem}
+  .log .t{font-size:1.4rem}
+  .receipt{font-size:.88rem}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{animation:none !important;transition:none !important}
+  .paper p{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<div id="progressBar" aria-hidden="true"></div>
+<canvas id="bg" aria-hidden="true"></canvas>
+
+<main>
+  <!-- 1. GİRİŞ -->
+  <section id="hero">
+    <h1><span data-receiver>Bora</span>, bu gökyüzü senin.</h1>
+    <p class="lead">Space Apps kankasına küçük bir görev sürprizi.</p>
+    <button class="btn" id="startBtn">Gökyüzünü aç</button>
+    <p class="hint">İstersen ekrana dokun, bir yıldız bırak.</p>
+  </section>
+
+  <!-- 2. YILDIZLAR -->
+  <section id="sky">
+    <h2>Her yıldız bir sebep.</h2>
+    <p class="lead">Dokun ve neden böyle bir kanka olduğunu gör.</p>
+    <div id="constellation" role="group" aria-label="Yıldızlar"></div>
+    <div id="reason" aria-live="polite">Bir yıldıza dokun.</div>
+    <div id="progress"></div>
+    <div id="nudge">Takımyıldız tamam. Aşağı kaydır, görev başlıyor.</div>
+  </section>
+
+  <!-- 3. GÖREV KAYDI -->
+  <section id="mission">
+    <h2 id="missionTitle">Görev kaydı</h2>
+    <p class="lead" id="missionLead"></p>
+    <ul class="log" id="log"></ul>
+    <button class="btn" id="launchBtn">Roketi fırlat</button>
+    <div id="launchMsg" aria-live="polite"></div>
+  </section>
+
+  <!-- 4. SAYAÇ -->
+  <section id="time">
+    <h2>Kanka sayacı</h2>
+    <p class="count" id="count" aria-live="off">…</p>
+    <p class="lead">Ve saymaya devam ediyor.</p>
+  </section>
+
+  <!-- 5. MEKTUP -->
+  <section id="letter">
+    <h2>Sana bir not bıraktım.</h2>
+    <button id="envelope" aria-expanded="false" aria-controls="letterWrap">
+      <b class="seal" aria-hidden="true">🚀</b>
+      <span>Açmak için dokun</span>
+    </button>
+    <div id="letterWrap">
+      <div><div class="paper" id="paper"></div></div>
+    </div>
+  </section>
+
+  <!-- 6. RİCA -->
+  <section id="ask">
+    <h2>Son bir ricam var…</h2>
+    <p class="big" id="askText">Kanka, bana Claude Pro ısmarlar mısın canım?</p>
+    <span class="price" id="priceChip">Claude Pro · aylık 20 $</span>
+
+    <div id="askBox">
+      <div class="actions" id="actions">
+        <button class="btn" id="yes">Evet, ısmarlarım</button>
+        <button class="btn ghost" id="no">Hayır</button>
+      </div>
+      <div id="quip" aria-live="polite"></div>
+      <div id="tries"></div>
+    </div>
+
+    <div id="thanks" role="status">
+      <p class="big">Anlaştık kanka.</p>
+      <div class="receipt" id="receipt"></div>
+      <a class="btn" href="https://claude.ai/upgrade" target="_blank" rel="noopener">claude.ai/upgrade’i aç</a>
+    </div>
+  </section>
+</main>
+
+<footer>Sadece <span data-receiver>Bora</span> için yapıldı 🚀</footer>
+
+<div id="launchOverlay" aria-hidden="true"><span id="countNum"></span></div>
+
+<noscript><p style="position:relative;z-index:2;padding:2rem;text-align:center">Bu site JavaScript ile çalışır. Lütfen JavaScript’i aç.</p></noscript>
+
+<script>
+/* =====================================================
+   BURAYI KENDİNE GÖRE DÜZENLE
+   ===================================================== */
+const CONFIG = {
+  receiver: "Bora",
+  sender: "Emirhan",
+  startDate: "2026-05-06T00:00:00",     // MEB Robot’tan beri (bugün itibarıyla 203 gün)
+  reasons: [                            // ← tam 10 tane olmalı
+    "Uykusuz bile olsan espri yapabilmen.",
+    "Kod patladığında sakin kalman.",
+    "Her fikrime “bi bakalım” demen.",
+    "Birlikte saçmalayıp kahkaha atmamız.",
+    "Zor günümde yanımda olman.",
+    "Bana güvenmen.",
+    "Gerektiğinde dürüstçe “bu olmamış” diyebilmen.",
+    "Takım arkadaşı değil, gerçek kanka olman.",
+    "Bitmeyen enerjin.",
+    "Sen olduğun için."
+  ],
+  spaceApps: {
+    title: "NASA Space Apps Challenge",
+    lead: "MEB Robot’tan Space Apps’e uzanan yolumuz. Adımlara dokun, hatırla.",
+    log: [                              // ← gerçek anılarınla değiştir
+      { t: "MEB Robot’ta tanıştık",   d: "Her şey orada başladı." },
+      { t: "Takımı kurduk",          d: "İki kişi, tek hedef." },
+      { t: "Challenge’ı seçtik",     d: "Saatlerce konuştuk, sonunda karar verdik." },
+      { t: "Sabaha kadar kodladık",  d: "Çay, kahve ve bitmeyen hata mesajları." },
+      { t: "Projeyi teslim ettik",   d: "Yorgunduk ama gurur duyuyorduk." }
+    ],
+    success: "Görev başarılı, Bora. 🚀"
+  },
+  letter: [                             // ← istediğin gibi değiştir
+    "Bora, kanka. MEB Robot’ta tanıştığımızdan beri geçen günler, Space Apps’te sabaha kadar uğraştığımız o gece benim için çok özeldi.",
+    "Bu site küçük bir teşekkür. Birlikte yazdığımız kod, güldüğümüz anlar ve dertleştiğimiz her an için.",
+    "Bir sonraki görevde de yan yana olalım. İyi ki kankamsın."
+  ]
+};
+
+/* =====================================================
+   KODUN GERİ KALANI
+   ===================================================== */
+const $ = (s, r = document) => r.querySelector(s);
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+document.querySelectorAll("[data-receiver]").forEach(e => e.textContent = CONFIG.receiver);
+document.title = CONFIG.receiver + ", bu gökyüzü senin";
+
+/* ---------- Yıldızlı arka plan ---------- */
+const cv = $("#bg"), ctx = cv.getContext("2d");
+let W, H, stars = [], shoot = null, px = 0, py = 0;
+function resize(){
+  const d = Math.min(devicePixelRatio || 1, 2);
+  W = innerWidth; H = innerHeight;
+  cv.width = W * d; cv.height = H * d;
+  ctx.setTransform(d, 0, 0, d, 0, 0);
+  stars = Array.from({length: Math.round(W * H / 7500)}, () => ({
+    x: Math.random() * W, y: Math.random() * H,
+    r: Math.random() * 1.2 + .25, p: Math.random() * 6.28, s: Math.random() * 1.5 + .5
+  }));
+  if (reduce) draw(0);
+}
+function draw(t){
+  ctx.clearRect(0, 0, W, H);
+  for (const s of stars){
+    ctx.globalAlpha = .35 + .65 * (.5 + .5 * Math.sin(t / 1000 * s.s + s.p));
+    ctx.fillStyle = "#fff";
+    ctx.beginPath();
+    ctx.arc(s.x + px * s.r * 6, s.y + py * s.r * 6, s.r, 0, 6.283);
+    ctx.fill();
+  }
+  if (shoot){
+    shoot.x += shoot.vx; shoot.y += shoot.vy; shoot.life -= 1;
+    const g = ctx.createLinearGradient(shoot.x, shoot.y, shoot.x - shoot.vx * 14, shoot.y - shoot.vy * 14);
+    g.addColorStop(0, "rgba(243,201,120,.95)"); g.addColorStop(1, "rgba(243,201,120,0)");
+    ctx.globalAlpha = 1; ctx.strokeStyle = g; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(shoot.x, shoot.y);
+    ctx.lineTo(shoot.x - shoot.vx * 14, shoot.y - shoot.vy * 14); ctx.stroke();
+    if (shoot.life <= 0) shoot = null;
+  }
+  if (!reduce) requestAnimationFrame(draw);
+}
+addEventListener("resize", resize);
+addEventListener("pointermove", e => { px = e.clientX / W - .5; py = e.clientY / H - .5; }, {passive: true});
+resize();
+if (!reduce){
+  requestAnimationFrame(draw);
+  (function loop(){
+    shoot = { x: Math.random() * W * .7, y: Math.random() * H * .3, vx: 9, vy: 4.5, life: 60 };
+    setTimeout(loop, 6000 + Math.random() * 6000);
+  })();
+}
+
+/* ---------- Uçan emojiler ---------- */
+const BITS = ["⭐", "🚀", "✨", "💫", "🌟"];
+function floatBit(x, y, ch){
+  if (reduce) return;
+  const el = document.createElement("span");
+  el.className = "fh";
+  el.textContent = ch || BITS[Math.floor(Math.random() * BITS.length)];
+  el.style.left = x + "px"; el.style.top = y + "px";
+  el.style.setProperty("--dx", (Math.random() * 90 - 45) + "px");
+  el.style.fontSize = (16 + Math.random() * 24) + "px";
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 2200);
+}
+function rain(n){
+  for (let i = 0; i < n; i++)
+    setTimeout(() => floatBit(Math.random() * innerWidth, innerHeight * (.4 + Math.random() * .5)), i * 60);
+}
+$("#hero").addEventListener("pointerdown", e => {
+  if (e.target.closest("button")) return;
+  floatBit(e.clientX, e.clientY);
+});
+$("#startBtn").addEventListener("click", () => $("#sky").scrollIntoView({behavior: reduce ? "auto" : "smooth"}));
+
+/* ---------- Yıldız şeklinde takımyıldız ---------- */
+const N = CONFIG.reasons.length;
+const POS = Array.from({length: N}, (_, i) => {
+  const outer = i % 2 === 0;
+  const a = -Math.PI / 2 + i * Math.PI / (N / 2);
+  const r = outer ? 40 : 17;
+  return [50 + r * Math.cos(a), 54 + r * Math.sin(a)];
+});
+const box = $("#constellation");
+const NS = "http://www.w3.org/2000/svg";
+const svg = document.createElementNS(NS, "svg");
+box.appendChild(svg);
+const lines = POS.map((p, i) => {
+  const q = POS[(i + 1) % N];
+  const l = document.createElementNS(NS, "line");
+  l.setAttribute("x1", p[0] + "%"); l.setAttribute("y1", p[1] + "%");
+  l.setAttribute("x2", q[0] + "%"); l.setAttribute("y2", q[1] + "%");
+  svg.appendChild(l);
+  return l;
+});
+const found = new Set();
+const reasonEl = $("#reason"), progEl = $("#progress");
+progEl.textContent = `0 / ${N} yıldız`;
+POS.forEach((p, i) => {
+  const b = document.createElement("button");
+  b.className = "star";
+  b.style.left = p[0] + "%"; b.style.top = p[1] + "%";
+  b.setAttribute("aria-label", `Yıldız ${i + 1}`);
+  b.addEventListener("click", () => {
+    found.add(i); b.classList.add("found"); try { navigator.vibrate && navigator.vibrate(15); } catch(e){}
+    reasonEl.textContent = CONFIG.reasons[i];
+    reasonEl.classList.remove("swap"); void reasonEl.offsetWidth; reasonEl.classList.add("swap");
+    progEl.textContent = `${found.size} / ${N} yıldız`;
+    const r = b.getBoundingClientRect();
+    floatBit(r.left + r.width / 2, r.top + r.height / 2, "✨");
+    lines.forEach((l, k) => { if (found.has(k) && found.has((k + 1) % N)) l.classList.add("on"); });
+    if (found.size === N){
+      box.classList.add("done");
+      $("#nudge").classList.add("show");
+      rain(14);
+    }
+  });
+  box.appendChild(b);
+});
+
+/* ---------- Görev kaydı (Space Apps) ---------- */
+$("#missionTitle").textContent = CONFIG.spaceApps.title;
+$("#missionLead").textContent = CONFIG.spaceApps.lead;
+const logEl = $("#log");
+CONFIG.spaceApps.log.forEach((item, i) => {
+  const li = document.createElement("li");
+  li.innerHTML = `<span class="dot">${i + 1}</span>
+    <button aria-expanded="false"><div class="t"></div>
+    <div class="d"><div></div></div></button>`;
+  li.querySelector(".t").textContent = item.t;
+  li.querySelector(".d > div").textContent = item.d;
+  const btn = li.querySelector("button");
+  btn.addEventListener("click", () => {
+    const open = li.classList.toggle("open");
+    btn.setAttribute("aria-expanded", String(open));
+  });
+  logEl.appendChild(li);
+});
+
+const overlay = $("#launchOverlay"), countNum = $("#countNum"), launchMsg = $("#launchMsg");
+$("#launchBtn").addEventListener("click", () => {
+  if (reduce){ launchMsg.textContent = CONFIG.spaceApps.success; return; }
+  launchMsg.textContent = "";
+  overlay.classList.add("on");
+  const seq = ["3", "2", "1"];
+  let k = 0;
+  countNum.innerHTML = seq[0];
+  const iv = setInterval(() => {
+    k++;
+    if (k < seq.length){ countNum.innerHTML = seq[k]; return; }
+    clearInterval(iv);
+    countNum.innerHTML = '<span class="rocket">🚀</span>';
+    requestAnimationFrame(() => $(".rocket").classList.add("fly"));
+    setTimeout(() => {
+      overlay.classList.remove("on");
+      launchMsg.textContent = CONFIG.spaceApps.success;
+      rain(30);
+    }, 1500);
+  }, 800);
+});
+
+/* ---------- Kaydırma çubuğu ---------- */
+const bar = $("#progressBar");
+function onScroll(){
+  const max = document.documentElement.scrollHeight - innerHeight;
+  bar.style.width = (max > 0 ? scrollY / max * 100 : 0) + "%";
+}
+addEventListener("scroll", onScroll, {passive: true}); onScroll();
+
+/* ---------- Sayaç ---------- */
+const countEl = $("#count");
+function tick(){
+  const s = Math.floor(Math.max(0, Date.now() - new Date(CONFIG.startDate).getTime()) / 1000);
+  countEl.innerHTML =
+    `MEB Robot’tan beri <b>${Math.floor(s / 86400)}</b> gün, <b>${Math.floor(s % 86400 / 3600)}</b> saat, ` +
+    `<b>${Math.floor(s % 3600 / 60)}</b> dakika ve <b>${s % 60}</b> saniyedir kankayız.`;
+}
+tick(); setInterval(tick, 1000);
+
+/* ---------- Mektup ---------- */
+const paper = $("#paper");
+CONFIG.letter.forEach(t => { const p = document.createElement("p"); p.textContent = t; paper.appendChild(p); });
+const sign = document.createElement("p");
+sign.className = "sign"; sign.textContent = "Kankan, " + CONFIG.sender;
+paper.appendChild(sign);
+const env = $("#envelope"), wrap = $("#letterWrap");
+env.addEventListener("click", () => {
+  const open = env.getAttribute("aria-expanded") === "true";
+  env.setAttribute("aria-expanded", String(!open));
+  wrap.classList.toggle("open", !open);
+  if (!open) setTimeout(() => wrap.scrollIntoView({behavior: reduce ? "auto" : "smooth", block: "center"}), 400);
+});
+
+/* ---------- Rica: Claude Pro + kaçan Hayır butonu ---------- */
+const yes = $("#yes"), no = $("#no"), quip = $("#quip"), triesEl = $("#tries");
+const NO_TEXT = ["Hayır", "Emin misin?", "Düşün bir daha…", "Yapma ama 🥺", "Lütfen?", "Son şans…", "Tamam, evet"];
+const QUIPS = [
+  "",
+  "Ooo, yakalayamazsın 😎",
+  "Parmağın mı kayıyor Bora?",
+  "Evet butonu büyüyor, fark ettin mi?",
+  "Space Apps’te bile bu kadar uğraşmadık.",
+  "Sana güveniyorum, doğru butona basacaksın.",
+  "Tamam, pes. Yenildim… yani yenildin."
+];
+const LIMIT = NO_TEXT.length - 1;
+let dodges = 0, lastDodge = 0;
+
+const buzz = ms => { try { navigator.vibrate && navigator.vibrate(ms); } catch(e){} };
+function say(i){
+  quip.textContent = QUIPS[i];
+  quip.classList.remove("pop"); void quip.offsetWidth; quip.classList.add("pop");
+}
+function dodge(){
+  if (dodges >= LIMIT) return;
+  dodges++; buzz(25);
+  no.textContent = NO_TEXT[dodges];
+  say(dodges);
+  triesEl.textContent = `“Hayır”a basma denemesi: ${dodges}`;
+  no.classList.add("flying");
+  no.style.transform = `scale(${Math.max(.6, 1 - dodges * .07)})`;
+  yes.style.transform = `scale(${1 + dodges * .14})`;
+  const bw = no.offsetWidth, bh = no.offsetHeight, yr = yes.getBoundingClientRect();
+  let x, y, tries = 0;
+  do {
+    x = 8 + Math.random() * (innerWidth - bw - 16);
+    y = 8 + Math.random() * (innerHeight - bh - 16);
+    tries++;
+  } while (tries < 40 && x < yr.right + 20 && x + bw > yr.left - 20 && y < yr.bottom + 20 && y + bh > yr.top - 20);
+  no.style.left = x + "px"; no.style.top = y + "px";
+  if (dodges === 3) $("#askText").classList.add("shake"), setTimeout(() => $("#askText").classList.remove("shake"), 450);
+  if (dodges === LIMIT){
+    no.classList.remove("ghost");
+    no.style.background = "var(--rose)"; no.style.color = "var(--ink)";
+    no.style.transform = "scale(1)";
+    no.classList.remove("flying");           // artık yerine döner
+    no.style.left = no.style.top = "";
+  }
+}
+// Fare yaklaştıkça kaçar (masaüstü)
+addEventListener("pointermove", e => {
+  if (e.pointerType === "touch" || dodges >= LIMIT) return;
+  const r = no.getBoundingClientRect();
+  const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+  if (Math.hypot(e.clientX - cx, e.clientY - cy) < 95 && Date.now() - lastDodge > 220){
+    lastDodge = Date.now(); dodge();
+  }
+}, {passive: true});
+// Dokunmatik / tıklama
+no.addEventListener("pointerdown", e => { if (dodges < LIMIT){ e.preventDefault(); dodge(); } });
+no.addEventListener("click", e => { if (dodges < LIMIT){ e.preventDefault(); dodge(); } else sayYes(); });
+yes.addEventListener("click", sayYes);
+
+function sayYes(){
+  try { navigator.vibrate && navigator.vibrate([60, 40, 60, 40, 120]); } catch(e){}
+  $("#askBox").style.display = "none";
+  $("#askText").style.display = "none";
+  $("#priceChip").style.display = "none";
+  const today = new Date().toLocaleDateString("tr-TR");
+  $("#receipt").innerHTML = `
+    <h3>— FATURA —</h3>
+    <div class="row"><span>Ürün</span><span>Claude Pro, 1 ay</span></div>
+    <div class="row"><span>Tutar</span><span>20 $</span></div>
+    <div class="row"><span>Alıcı</span><span></span></div>
+    <div class="row"><span>Ödeyen</span><span></span></div>
+    <div class="row"><span>Tarih</span><span>${today}</span></div>
+    <div class="row"><span>“Hayır” denemesi</span><span>${dodges}</span></div>
+    <div class="ok">ONAYLANDI ✓</div>`;
+  const rows = document.querySelectorAll("#receipt .row");
+  rows[2].lastElementChild.textContent = CONFIG.sender;
+  rows[3].lastElementChild.textContent = CONFIG.receiver;
+  $("#thanks").classList.add("show");
+  rain(45);
+}
+</script>
+</body>
+</html>
